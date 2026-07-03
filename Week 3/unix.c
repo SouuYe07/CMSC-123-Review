@@ -14,6 +14,11 @@ typedef struct Directory{
     int fileType;
 } Node;
 
+struct pwdList{
+    char filename[20];
+    struct pwdList *next;
+};
+
 struct Directory* initializeNode(){
     struct Directory* newNode = (struct Directory*)malloc(sizeof(struct Directory));
     newNode->firstChild = NULL;
@@ -28,6 +33,13 @@ void addLastSibling(struct Directory** head, struct Directory* newNode){
 
     while(temp->nextSibling != NULL) temp = temp->nextSibling;
     temp->nextSibling = newNode;
+}
+
+void printer(struct Directory* currentDirectory){
+    if (currentDirectory->parent != NULL){
+        printer(currentDirectory->parent);
+    }
+    printf("/%s", currentDirectory->filename);
 }
 
 void createItem(struct Directory* currentDirectory){
@@ -80,12 +92,6 @@ struct Directory* changeDirectory(struct Directory* currentDirectory){
 
     struct Directory* temp = currentDirectory->firstChild;
 
-    if (temp == NULL){
-        printf("test\n\n");
-        return currentDirectory;
-    } 
-
-
     while(temp != NULL){
         if (strcmp(filename, temp->filename) == 0){ 
             if (temp->fileType == DIRECTORY){
@@ -99,16 +105,13 @@ struct Directory* changeDirectory(struct Directory* currentDirectory){
         }
         temp = temp->nextSibling;
     }
-    printf("No file detected\n");
+    printf("No valid directory found\n");
     return currentDirectory;
 }
 
 void printPath(struct Directory* currentDirectory){
-    while(currentDirectory != NULL){
-        printf("/%s", currentDirectory->filename);
-        currentDirectory = currentDirectory->parent;
-    }
-    printf("\n");
+    printer(currentDirectory);
+    printf("/\n");
     return;
 }
 
@@ -129,7 +132,7 @@ int main(){
         printf("[2] List Contents (ls) \n");
         printf("[3] Change Directory (cd) \n");
         printf("[4] Print Path (pwd) \n");
-        printf("[5] End Simulation \n");
+        printf("[5] End Simulation (sudo shutdown)\n");
         printf("Enter Choice: ");
         scanf(" %d", &choice);
         
@@ -146,6 +149,8 @@ int main(){
             case 4:
                 printPath(currentDirectory);
                 break;
+            case 5:
+                printf("Terminating. ");
         }
         printf("\n");
     }
