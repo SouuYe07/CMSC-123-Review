@@ -10,6 +10,7 @@ typedef struct Directory{
     char filename[20];
     struct Directory* firstChild;
     struct Directory* nextSibling;
+    struct Directory* parent;
     int fileType;
 } Node;
 
@@ -17,6 +18,7 @@ struct Directory* initializeNode(){
     struct Directory* newNode = (struct Directory*)malloc(sizeof(struct Directory));
     newNode->firstChild = NULL;
     newNode->nextSibling = NULL;
+    newNode->parent = NULL;
 
     return newNode;
 }
@@ -32,6 +34,7 @@ void createItem(struct Directory* currentDirectory){
     char choice;
     char filename[20];
     struct Directory *newNode = initializeNode();
+    newNode->parent = currentDirectory;
 
     while(1){
         printf("Create [D]irectory or [F]ile? ");
@@ -52,12 +55,9 @@ void createItem(struct Directory* currentDirectory){
 
     if (currentDirectory->firstChild == NULL) currentDirectory->firstChild = newNode;
     else addLastSibling(&(currentDirectory)->firstChild, newNode);
-    printf("%s\n\n\n", currentDirectory->firstChild->nextSibling->filename);
 }
 
 void listContent(struct Directory* head){
-    if (head == NULL) return;
-
     while (head != NULL){
         if (head->fileType == DIRECTORY) printf("/");
         printf("%s\n", head->filename);
@@ -65,11 +65,58 @@ void listContent(struct Directory* head){
     }
 }
 
+struct Directory* changeDirectory(struct Directory* currentDirectory){
+    printf("Enter destination directory: ");
+    char filename[20];
+    scanf(" %19[^\n]", filename);
+
+    if (strcmp(filename, "..") == 0){
+        if (strcmp(currentDirectory->filename, "root") == 0){
+            printf("No parent from root directory\n");
+        }
+        printf("Successfully changed directory to %s/\n", currentDirectory->parent->filename);
+        return currentDirectory->parent;
+    }
+
+    struct Directory* temp = currentDirectory->firstChild;
+
+    if (temp == NULL){
+        printf("test\n\n");
+        return currentDirectory;
+    } 
+
+
+    while(temp != NULL){
+        if (strcmp(filename, temp->filename) == 0){ 
+            if (temp->fileType == DIRECTORY){
+                printf("Successfully changed directory to %s/\n", temp->filename);
+                return temp;
+            }
+            else{
+                printf("Error: '%s' is a file, cannot change directory!\n", temp->filename);
+                return currentDirectory;
+            }
+        }
+        temp = temp->nextSibling;
+    }
+    printf("No file detected\n");
+    return currentDirectory;
+}
+
+void printPath(struct Directory* currentDirectory){
+    while(currentDirectory != NULL){
+        printf("/%s", currentDirectory->filename);
+        currentDirectory = currentDirectory->parent;
+    }
+    printf("\n");
+    return;
+}
+
 int main(){
-    struct Directory* root = (struct Directory*)malloc(sizeof(struct Directory));
-    struct Directory* currentDirectory = initializeNode();
+    struct Directory* root = initializeNode();
     strcpy(root->filename, "root");
     root->fileType = DIRECTORY;
+    struct Directory* currentDirectory = root;
 
     int choice;
 
@@ -92,6 +139,12 @@ int main(){
                 break;
             case 2:
                 listContent(currentDirectory->firstChild);
+                break;
+            case 3:
+                currentDirectory = changeDirectory(currentDirectory);
+                break;
+            case 4:
+                printPath(currentDirectory);
                 break;
         }
         printf("\n");
