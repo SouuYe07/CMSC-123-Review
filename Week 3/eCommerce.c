@@ -45,6 +45,60 @@ struct node* findNode(struct node* head, int id){
     return NULL;
 }
 
+struct node* findMin(struct node* head){
+    if (head->leftChild){
+        return findMin(head->leftChild);
+    }
+    return head;
+}
+
+void insertToParent(struct node* parent, struct node* child, int isLeft){
+    if(isLeft){
+        head->leftChild = child;
+    }
+    else{
+        head->rightChild = child;
+    }
+}
+
+void deleteNode(struct node* head, int id){
+    int isLeft;
+    struct node *toDelete = NULL;
+
+    if (head->leftChild->id == id){
+        toDelete = head->leftChild;
+        isLeft = 1;
+    }
+    else if(head->rightChild->id == id){
+        toDelete = head->rightChild;
+        isLeft = 0;
+    }
+
+    if (toDelete){
+        if(toDelete->leftChild && toDelete->rightChild){
+            if(isLeft){
+                head->leftChild = findMin(toDelete->rightChild);
+            }
+            else{
+                head->rightChild = findMin(toDelete->rightChild);
+            }
+
+            
+        }
+
+        free(toDelete);
+    }
+
+    if (id < head->id){
+        deleteNode(head->leftChild, id);
+    }
+    else if (id > head->id){
+        deleteNode(head->rightChild, id);
+    }
+
+    printf("Product not found. \n");
+}
+
 void insertProduct(struct node** head){
     int id, quantity;
     struct node* toInsert;
@@ -95,6 +149,21 @@ void findUpdate(struct node* head){
     }
 }
 
+void deleteProduct(struct node** head){
+    int id;
+    printf("Enter Product ID to delete: ");
+    scanf("%d", &id);
+
+    if ((*head)->id == id){
+        free(*head);
+        *head = NULL;
+    }
+    
+    else deleteNode(*head, id);
+
+    printf("Product deleted.\n");
+}
+
 void displayInventory(struct node* head){
     if (head == NULL){
         printf("Inventory is currently empty.\n");
@@ -130,6 +199,10 @@ int main(void){
                 break;
             case 2:
                 findUpdate(head);
+                break;
+            case 3:
+                deleteProduct(&head);
+                break;
             case 4:
                 printf("--- Current Inventory (Inorder) ---\n");
                 displayInventory(head);
