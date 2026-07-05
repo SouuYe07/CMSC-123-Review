@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 struct node{
     int id;
@@ -7,8 +8,30 @@ struct node{
     struct node *rightChild;
 };
 
+struct node* initNode(){
+    struct node* initialized = (struct node*)malloc(sizeof(struct node));
+
+    initialized->leftChild = NULL;
+    initialized->rightChild = NULL;
+    return initialized;
+}
+
+void insertProduct(struct node* head){
+    int id, quantity;
+    struct node** toInsert;
+
+    printf("Enter Product ID: ");
+    scanf("%d", &id);
+
+    printf("Enter Strock Quantity: ");
+    scanf("%d", &quantity);
+
+    return;
+}
+
 int main(void){
     int choice;
+    struct node* head = initNode();
 
     while(1){
         printf("*********************************\n");
@@ -25,7 +48,7 @@ int main(void){
 
         switch (choice){
             case 1:
-                
+                insertProduct(&head);
         }
     }
 }
