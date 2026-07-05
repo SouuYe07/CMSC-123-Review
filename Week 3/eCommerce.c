@@ -54,11 +54,6 @@ void insertProduct(struct node** head){
         toInsert = insertNode((*head), id);
     }
 
-    if (toInsert == NULL){
-        printf("Product with ID already exists.\n");
-        return;
-    }
-
     printf("Enter Stock Quantity: ");
     scanf("%d", &quantity);
 
@@ -67,6 +62,18 @@ void insertProduct(struct node** head){
     toInsert->quantity = quantity;
 
     return;
+}
+
+void displayInventory(struct node* head){
+    if (head == NULL){
+        printf("Inventory is currently empty.\n");
+        return;
+    }
+    if (head->leftChild != NULL) displayInventory(head->leftChild);
+    
+    printf("ID: %i | Quantity: %i\n", head->id, head->quantity);
+
+    if (head->rightChild != NULL) displayInventory(head->rightChild);
 }
 
 int main(void){
@@ -90,11 +97,10 @@ int main(void){
             case 1:
                 insertProduct(&head);
                 break;
-            case 2:
-                printf("%i\n", head->id);
-                break;
-            case 3:
-                printf("%i\n", head->rightChild->rightChild->id);
+            case 4:
+                printf("--- Current Inventory (Inorder) ---\n");
+                displayInventory(head);
+                printf("***********************************\n");
                 break;
         }
         printf("\n");
