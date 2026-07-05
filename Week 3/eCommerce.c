@@ -16,22 +16,62 @@ struct node* initNode(){
     return initialized;
 }
 
-void insertProduct(struct node* head){
+struct node* insertNode(struct node* temp, int id){
+    if (id == temp->id){
+        return NULL;
+    }
+
+    else if (id < temp->id){
+        if (temp->leftChild == NULL){
+            temp->leftChild = initNode();
+            return temp->leftChild;
+        }
+        else insertNode(temp->leftChild, id);
+    }
+
+    else if (id > temp->id){
+        if (temp->rightChild == NULL){
+            temp->rightChild = initNode();
+            return temp->rightChild;
+        }
+        else insertNode(temp->rightChild, id);
+    }
+}
+
+void insertProduct(struct node** head){
     int id, quantity;
-    struct node** toInsert;
+    struct node* toInsert;
 
     printf("Enter Product ID: ");
     scanf("%d", &id);
 
-    printf("Enter Strock Quantity: ");
+    if ((*head) == NULL){
+        *head = initNode();
+        toInsert = *head;
+    }
+    
+    else{
+        toInsert = insertNode((*head), id);
+    }
+
+    if (toInsert == NULL){
+        printf("Product with ID already exists.\n");
+        return;
+    }
+
+    printf("Enter Stock Quantity: ");
     scanf("%d", &quantity);
+
+
+    toInsert->id = id;
+    toInsert->quantity = quantity;
 
     return;
 }
 
 int main(void){
     int choice;
-    struct node* head = initNode();
+    struct node* head = NULL;
 
     while(1){
         printf("*********************************\n");
@@ -49,6 +89,14 @@ int main(void){
         switch (choice){
             case 1:
                 insertProduct(&head);
+                break;
+            case 2:
+                printf("%i\n", head->id);
+                break;
+            case 3:
+                printf("%i\n", head->rightChild->rightChild->id);
+                break;
         }
+        printf("\n");
     }
 }
