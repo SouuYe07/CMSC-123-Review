@@ -38,6 +38,13 @@ struct node* insertNode(struct node* temp, int id){
     }
 }
 
+struct node* findNode(struct node* head, int id){
+    if (head->id == id) return head;
+    else if (id < head->id) return findNode(head->leftChild, id);
+    else if (id > head->id) return findNode(head->rightChild, id);
+    return NULL;
+}
+
 void insertProduct(struct node** head){
     int id, quantity;
     struct node* toInsert;
@@ -62,6 +69,30 @@ void insertProduct(struct node** head){
     toInsert->quantity = quantity;
 
     return;
+}
+
+void findUpdate(struct node* head){
+    int id, quantity, choice;
+    printf("Enter Product ID to search: ");
+    scanf("%i", &id);
+
+    struct node* toUpdate = findNode(head, id);
+
+    if (toUpdate == NULL){
+        printf("Error: Product ID does not exist in the catalog..\n");
+        return;
+    }
+
+    printf("Product Found! Current Stock Quantity: %i\n", toUpdate->quantity);
+    printf("Would you like to update stock? (1-Yes / 0-No): ");
+    scanf("%i", &choice);
+
+    if (choice == 1){
+        printf("Enter New Stock Quantity: ");
+        scanf("%i", &quantity);
+        toUpdate->quantity = quantity;
+        printf("Stock updated.\n");
+    }
 }
 
 void displayInventory(struct node* head){
@@ -97,6 +128,8 @@ int main(void){
             case 1:
                 insertProduct(&head);
                 break;
+            case 2:
+                findUpdate(head);
             case 4:
                 printf("--- Current Inventory (Inorder) ---\n");
                 displayInventory(head);
