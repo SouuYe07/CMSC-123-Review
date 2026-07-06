@@ -52,51 +52,36 @@ struct node* findMin(struct node* head){
     return head;
 }
 
-void insertToParent(struct node* parent, struct node* child, int isLeft){
-    if(isLeft){
-        head->leftChild = child;
+struct node* deleteNode(struct node* head, int id){
+    struct node *temp;
+    struct node *child;
+
+    if (head == NULL){
+        printf("Head not found");
     }
-    else{
-        head->rightChild = child;
-    }
-}
-
-void deleteNode(struct node* head, int id){
-    int isLeft;
-    struct node *toDelete = NULL;
-
-    if (head->leftChild->id == id){
-        toDelete = head->leftChild;
-        isLeft = 1;
-    }
-    else if(head->rightChild->id == id){
-        toDelete = head->rightChild;
-        isLeft = 0;
-    }
-
-    if (toDelete){
-        if(toDelete->leftChild && toDelete->rightChild){
-            if(isLeft){
-                head->leftChild = findMin(toDelete->rightChild);
-            }
-            else{
-                head->rightChild = findMin(toDelete->rightChild);
-            }
-
-            
-        }
-
-        free(toDelete);
-    }
-
     if (id < head->id){
-        deleteNode(head->leftChild, id);
+        head->leftChild = deleteNode(head->leftChild, id);
     }
     else if (id > head->id){
-        deleteNode(head->rightChild, id);
+        head->rightChild = deleteNode(head->rightChild, id);
     }
-
-    printf("Product not found. \n");
+    else if (head->leftChild && head->rightChild){
+        temp = findMin(head->rightChild);
+        head->id = temp->id;
+        head->rightChild = deleteNode(head->rightChild, head->id);
+    }
+    else {
+        temp = head;
+        if (head->leftChild == NULL){
+            child = head->rightChild;
+        }
+        if (head->rightChild == NULL){
+            child = head->leftChild;
+        }
+        free(temp);
+        return child;
+    }
+    return head;
 }
 
 void insertProduct(struct node** head){
@@ -154,12 +139,7 @@ void deleteProduct(struct node** head){
     printf("Enter Product ID to delete: ");
     scanf("%d", &id);
 
-    if ((*head)->id == id){
-        free(*head);
-        *head = NULL;
-    }
-    
-    else deleteNode(*head, id);
+    *head = deleteNode(*head, id);
 
     printf("Product deleted.\n");
 }
