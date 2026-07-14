@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define LEFT 1
+#define RIGHT 2
+
 struct Node{
     int id;
     int height;
@@ -20,15 +23,16 @@ int max(int a, int b){
 }
 
 struct Node * insert(struct Node *head, int id){
+    int direction = NULL;
+
     if (head == NULL){
-        printf("Added Null\n");
         head = initNode();
         head->id = id;
         head->height = -1;
     }
     
     if (id < head->id){
-        printf("Went left\n");
+        direction = LEFT;
         head->leftChild = insert(head->leftChild, id);
 
         if (head->rightChild != NULL){
@@ -39,7 +43,7 @@ struct Node * insert(struct Node *head, int id){
         }
     }
     else if (id > head->id){
-        printf("Went right\n");
+        direction = RIGHT;
         head->rightChild = insert(head->rightChild, id);
 
         if (head->leftChild != NULL){
@@ -50,6 +54,9 @@ struct Node * insert(struct Node *head, int id){
         }
     }
 
+    if (abs(head->leftChild->height - head->rightChild->height) > 1){
+        printf("Anomalia\n");
+    }
     printf("New height of ID %d: %d\n", head->id, head->height);
     return head;
 }
