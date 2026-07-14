@@ -3,6 +3,10 @@
 
 #define LEFT 1
 #define RIGHT 2
+#define SINGLEL 1
+#define SINGLER 2
+#define DOUBLEL 3
+#define DOUBLER 4
 
 struct Node{
     int id;
@@ -20,7 +24,7 @@ struct Node* initNode(){
 }
 
 int max(int a, int b){
-    int toReturn = (a >= b) ? a: b;
+    int toReturn = (a >= b) ? a : b;
     return toReturn;
 }
 
@@ -33,8 +37,49 @@ int difference(struct Node* head){
     return abs(left - right);
 }
 
+int determineRotation(struct Node* head, int id){
+    int first = 0, second = 0, rotation;
+    struct Node* traverse = NULL;
+
+    printf("Anomaly at head: %i\n", head->id);
+
+    if (id < head->id){
+        first = LEFT;
+        traverse = head->leftChild;
+    }
+    
+    else if (id > head->id){
+        first = RIGHT;
+        traverse = head->rightChild;
+    }
+
+    printf("Rotation: %i ", first);
+
+    if (traverse->leftChild != NULL){
+        if (id == traverse->leftChild->id){
+            second = LEFT;
+        }
+    }
+    else if (traverse->rightChild != NULL){
+        if (id == traverse->rightChild->id){
+            second = RIGHT;
+        }
+    }
+
+    if (first == LEFT){
+        rotation = DOUBLEL;
+        if (second == LEFT) rotation = SINGLEL;
+    }
+    else if (first == RIGHT){
+        rotation = DOUBLER;
+        if (second == RIGHT) rotation = SINGLER;
+    }
+
+    return rotation;
+}
+
 struct Node* insert(struct Node *head, int id){
-    int direction = 0;
+    int direction = 0, rotation = 0;
 
     if (head == NULL){
         head = initNode();
@@ -61,14 +106,12 @@ struct Node* insert(struct Node *head, int id){
             head->height = max(head->leftChild->height, head->rightChild->height) + 1;
         }
         else {
-            head->height = head->rightChild->height+ 1;
+            head->height = head->rightChild->height + 1;
         }
     }
 
-    if (difference(head) > 1){
-        printf("Anomalia\n");
-    }
-    printf("New height of ID %d: %d\n", head->id, head->height);
+    if (difference(head) > 1) rotation = determineRotation(head, id);
+    
     return head;
 }
 
