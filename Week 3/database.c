@@ -15,6 +15,8 @@ struct Node* initNode(){
     struct Node *init = (struct Node *)malloc(sizeof(struct Node));
     init->leftChild = NULL;
     init->rightChild = NULL;
+    init->height = 0;
+    return init;
 }
 
 int max(int a, int b){
@@ -22,13 +24,22 @@ int max(int a, int b){
     return toReturn;
 }
 
-struct Node * insert(struct Node *head, int id){
-    int direction = NULL;
+int difference(struct Node* head){
+    int right = -1, left = -1;
+
+    if (head->rightChild != NULL) right = head->rightChild->height;
+    if (head->leftChild != NULL) left = head->leftChild->height;
+
+    return abs(left - right);
+}
+
+struct Node* insert(struct Node *head, int id){
+    int direction = 0;
 
     if (head == NULL){
         head = initNode();
         head->id = id;
-        head->height = -1;
+        head->height = 0;
     }
     
     if (id < head->id){
@@ -54,7 +65,7 @@ struct Node * insert(struct Node *head, int id){
         }
     }
 
-    if (abs(head->leftChild->height - head->rightChild->height) > 1){
+    if (difference(head) > 1){
         printf("Anomalia\n");
     }
     printf("New height of ID %d: %d\n", head->id, head->height);
