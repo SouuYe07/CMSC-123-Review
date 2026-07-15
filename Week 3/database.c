@@ -142,13 +142,42 @@ struct Node *insertNode(struct Node *head){
 }
 
 void displayDatabase(struct Node *head){
-    printf("--- Current DB Index Structure (Level-Order) ---");
+    printf("--- Current DB Index Structure (Level-Order) ---\n");
     if (head == NULL){
         return;
     }
-    int level = 1;
-    struct Node* queue[100];
     
+    int level = 1, front = 0, rear = 2;
+    struct Node* queue[100];
+
+    queue[0] = head;
+    queue[1] = NULL;
+
+    printf("Level 0: ");
+
+    do {
+        head = queue[front];
+        
+        if (head == NULL){
+            printf("\nLevel %i: ", level);
+            queue[rear] == NULL;
+            rear++;
+            level++;
+            front++;
+        }
+
+        if (head->leftChild != NULL){
+            queue[rear] = head->leftChild;
+            rear++;
+        }
+        if (head->rightChild != NULL){
+            queue[rear] = head->rightChild;
+            rear++;
+        }
+
+        printf("[ID: %i, Height: %i] ", head->id, head->height);
+        front++;
+    } while (front != rear);
 }
 
 int main(void){
