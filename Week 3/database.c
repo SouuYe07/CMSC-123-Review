@@ -80,12 +80,12 @@ int determineRotation(struct Node* head, int id){
     return rotation;
 }
 
-void singleLeftRotation(struct Node* head){
+struct Node* singleLeftRotation(struct Node* head){
     struct Node* child = head->leftChild;
     struct Node* temp = child->rightChild;
     child->rightChild = head;
     head->leftChild = temp;
-    return;
+    return child;
 }
 
 struct Node* insert(struct Node *head, int id){
@@ -123,7 +123,8 @@ struct Node* insert(struct Node *head, int id){
     if (difference(head) > 1) rotation = determineRotation(head, id);
     switch (rotation){
         case SINGLEL:
-            singleLeftRotation(head);
+            printf("LEFT\n");
+            head = singleLeftRotation(head);
             break;
     }
     
