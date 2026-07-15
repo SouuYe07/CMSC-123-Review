@@ -7,6 +7,8 @@
 #define SINGLER 2
 #define DOUBLEL 3
 #define DOUBLER 4
+#define FALSE 0
+#define TRUE 1
 
 struct Node{
     int id;
@@ -78,6 +80,14 @@ int determineRotation(struct Node* head, int id){
     return rotation;
 }
 
+void singleLeftRotation(struct Node* head){
+    struct Node* child = head->leftChild;
+    struct Node* temp = child->rightChild;
+    child->rightChild = head;
+    head->leftChild = temp;
+    return;
+}
+
 struct Node* insert(struct Node *head, int id){
     int direction = 0, rotation = 0;
 
@@ -111,6 +121,11 @@ struct Node* insert(struct Node *head, int id){
     }
 
     if (difference(head) > 1) rotation = determineRotation(head, id);
+    switch (rotation){
+        case SINGLEL:
+            singleLeftRotation(head);
+            break;
+    }
     
     return head;
 }
@@ -126,8 +141,18 @@ struct Node *insertNode(struct Node *head){
     return head;
 }
 
+void displayDatabase(struct Node *head){
+    printf("--- Current DB Index Structure (Level-Order) ---");
+    if (head == NULL){
+        return;
+    }
+    int level = 1;
+    struct Node* queue[100];
+    
+}
+
 int main(void){
-    int choice;
+    int choice, amount = 0;
     struct Node *head = NULL;
 
     while (1){
@@ -143,6 +168,10 @@ int main(void){
         switch(choice){
             case 1:
                 head = insertNode(head);
+                break;
+            case 2:
+                displayDatabase(head);
+                break;
         }
         printf("\n");
     }
