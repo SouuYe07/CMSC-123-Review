@@ -43,8 +43,6 @@ int determineRotation(struct Node* head, int id){
     int first = 0, second = 0, rotation;
     struct Node* traverse = NULL;
 
-    printf("Anomaly at head: %i\n", head->id);
-
     if (id < head->id){
         first = LEFT;
         traverse = head->leftChild;
@@ -88,6 +86,14 @@ struct Node* singleLeftRotation(struct Node* head){
     return child;
 }
 
+struct Node* singleRightRotation(struct Node* head){
+    struct Node* child = head->rightChild;
+    struct Node* temp = child->leftChild;
+    child->leftChild = head;
+    head->rightChild = temp;
+    return child;
+}
+
 struct Node* insert(struct Node *head, int id){
     int direction = 0, rotation = 0;
 
@@ -123,8 +129,10 @@ struct Node* insert(struct Node *head, int id){
     if (difference(head) > 1) rotation = determineRotation(head, id);
     switch (rotation){
         case SINGLEL:
-            printf("LEFT\n");
             head = singleLeftRotation(head);
+            break;
+        case SINGLER:
+            head = singleRightRotation(head);
             break;
     }
     
