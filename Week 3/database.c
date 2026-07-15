@@ -147,7 +147,7 @@ void displayDatabase(struct Node *head){
         return;
     }
     
-    int level = 1, front = 0, rear = 2;
+    int level = 1, front = 0, rear = 1;
     struct Node* queue[100];
 
     queue[0] = head;
@@ -155,29 +155,33 @@ void displayDatabase(struct Node *head){
 
     printf("Level 0: ");
 
-    do {
+    while (1){
+        if (front == rear){
+            return;
+        }
+
         head = queue[front];
-        
+        front++;
+
         if (head == NULL){
             printf("\nLevel %i: ", level);
-            queue[rear] == NULL;
             rear++;
+            queue[rear] = NULL;
             level++;
-            front++;
+            continue;
         }
 
         if (head->leftChild != NULL){
-            queue[rear] = head->leftChild;
             rear++;
+            queue[rear] = head->leftChild;
         }
         if (head->rightChild != NULL){
-            queue[rear] = head->rightChild;
             rear++;
+            queue[rear] = head->rightChild;
         }
 
         printf("[ID: %i, Height: %i] ", head->id, head->height);
-        front++;
-    } while (front != rear);
+    } 
 }
 
 int main(void){
