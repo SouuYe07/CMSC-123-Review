@@ -100,7 +100,7 @@ struct Node* doubleLeftRotation(struct Node* head){
     child->rightChild = grandChild->leftChild;
     head->leftChild = grandChild->rightChild;
     grandChild->leftChild = child;
-    grandChild->rightChild = grandChild;
+    grandChild->rightChild = head;
     return grandChild;
 }
 
@@ -144,7 +144,8 @@ struct Node* insert(struct Node *head, int id){
         case SINGLER:
             head = singleRightRotation(head);
             break;
-        case = DOUBLE:
+        case DOUBLEL:
+            printf("TESTTEST\n");
             head = doubleLeftRotation(head);
             break;
     }
