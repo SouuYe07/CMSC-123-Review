@@ -45,7 +45,7 @@ void displayHierarchy(struct Node* head){
     }
 
     displayHierarchy(head->leftChild);
-    printf("woier%i\n", head->id);
+    printf("%i\n", head->id);
     displayHierarchy(head->rightChild);
 }
 
