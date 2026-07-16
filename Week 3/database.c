@@ -53,7 +53,6 @@ int determineRotation(struct Node* head, int id){
         traverse = head->rightChild;
     }
 
-    printf("Rotation: %i ", first);
 
     if (traverse->leftChild != NULL){
         if (id == traverse->leftChild->id){
@@ -104,6 +103,16 @@ struct Node* doubleLeftRotation(struct Node* head){
     return grandChild;
 }
 
+struct Node* doubleRightRotation(struct Node* head){
+    struct Node* child = head->rightChild;
+    struct Node* grandChild = child->leftChild;
+    child->leftChild = grandChild->rightChild;
+    head->rightChild = grandChild->leftChild;
+    grandChild->leftChild = head;
+    grandChild->rightChild = child;
+    return grandChild;
+}
+
 struct Node* insert(struct Node *head, int id){
     int direction = 0, rotation = 0;
 
@@ -145,8 +154,10 @@ struct Node* insert(struct Node *head, int id){
             head = singleRightRotation(head);
             break;
         case DOUBLEL:
-            printf("TESTTEST\n");
             head = doubleLeftRotation(head);
+            break;
+        case DOUBLER:
+            head = doubleRightRotation(head);
             break;
     }
     
