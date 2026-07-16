@@ -13,6 +13,29 @@ struct Node* initNode(){
     init->rightChild = NULL;
 }
 
+struct Node* insertNode(struct Node* head, int id){
+    if (head == NULL){
+        head = initNode();
+        head->id = id;
+        return head;
+    }
+
+    else if (id < head->id) insertNode(head->leftChild, id);
+    else if (id > head->id) insertNode(head->rightChild, id);
+    else if (id == head->id) return head;
+}
+
+struct Node* accessInsertRoute(struct Node* head){
+    int id;
+    printf("Enter Routing Key (IP ID): ");
+    scanf("%d", &id);
+
+    insertNode(head, id);
+
+    printf("Key %i inserted. Root is now %i.\n", id, id);
+    return head;
+}
+
 int main(void){
     int choice;
     struct Node* head = initNode();
@@ -32,8 +55,10 @@ int main(void){
 
         switch (choice){
             case 1:
+                head = accessInsertRoute(head);
                 break;
         }
+        printf("\n");
     }
     return 0;
 }
