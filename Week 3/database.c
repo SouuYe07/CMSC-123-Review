@@ -94,6 +94,16 @@ struct Node* singleRightRotation(struct Node* head){
     return child;
 }
 
+struct Node* doubleLeftRotation(struct Node* head){
+    struct Node* child = head->leftChild;
+    struct Node* grandChild = child->rightChild;
+    child->rightChild = grandChild->leftChild;
+    head->leftChild = grandChild->rightChild;
+    grandChild->leftChild = child;
+    grandChild->rightChild = grandChild;
+    return grandChild;
+}
+
 struct Node* insert(struct Node *head, int id){
     int direction = 0, rotation = 0;
 
@@ -133,6 +143,9 @@ struct Node* insert(struct Node *head, int id){
             break;
         case SINGLER:
             head = singleRightRotation(head);
+            break;
+        case = DOUBLE:
+            head = doubleLeftRotation(head);
             break;
     }
     

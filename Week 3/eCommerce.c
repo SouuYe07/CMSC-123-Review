@@ -36,6 +36,10 @@ struct node* insertNode(struct node* temp, int id){
         }
         else insertNode(temp->rightChild, id);
     }
+
+    if (temp == NULL){
+        temp = initNode()
+    }
 }
 
 struct node* findNode(struct node* head, int id){
