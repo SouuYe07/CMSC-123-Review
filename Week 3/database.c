@@ -53,7 +53,6 @@ int determineRotation(struct Node* head, int id){
         traverse = head->rightChild;
     }
 
-
     if (traverse->leftChild != NULL){
         if (id == traverse->leftChild->id){
             second = LEFT;
